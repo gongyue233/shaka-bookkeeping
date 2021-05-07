@@ -1,6 +1,6 @@
 <template>
-    <div class="nav-warpper">
-        <div class="content">
+    <div class="layout-warpper" :class="classPrefix && `${classPrefix}-wrapper`">
+        <div class="content" :class="classPrefix && `${classPrefix}-content`">
         <slot />
         </div>
         <Nav />
@@ -10,12 +10,12 @@
 <script lang="ts">
 export default {
     name:'Layout',
+    props:['classPrefix']
 }
 </script>
 
 <style lang="scss" scoped>
-.nav-warpper{
-    border: 1px solid green;
+.layout-warpper{
     display: flex;
     flex-direction: column;
     height: 100vh;
