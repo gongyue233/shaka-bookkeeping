@@ -6,15 +6,15 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';//引入Component装饰器
+import {Component, Prop, Watch} from 'vue-property-decorator';
 @Component
-export default class Types extends Vue{ //将装饰器修饰到了class身上   
-    type = '-'
+export default class Types extends Vue{ 
+    @Prop()readonly type!:string; 
     selectType(type: string){
         if(type!=='-' && type!=='+'){
             throw new Error('type is unknown');           
         }
-        this.type = type;
+        this.$emit('update:type', type)
     }
 }
 </script>

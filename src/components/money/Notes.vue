@@ -1,16 +1,20 @@
 <template>
     <label class="remark-notes">
             <span>备注</span>
-            <input type="text" placeholder="添加备注" v-model="value">
+            <input type="text" placeholder="添加备注" v-model="note">
         </label>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import {Component, Emit, Watch} from 'vue-property-decorator';
 @Component
 export default class Notes extends Vue{
-   value = '';
+   note = '';
+   @Watch('note')
+   onNoteChanged(note: string){
+       this.$emit('update:value', note)
+   }
 
 }
 </script>

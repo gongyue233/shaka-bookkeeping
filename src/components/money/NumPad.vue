@@ -13,7 +13,7 @@
                 <button @click="countContent">7</button>
                 <button @click="countContent">8</button>
                 <button @click="countContent">9</button>
-                <button class="ok">确定</button>
+                <button class="ok" @click="okAmount">确定</button>
                 <button class="zero" @click="countContent">0</button>
                 <button @click="countContent">.</button>
             </div>
@@ -22,10 +22,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 @Component
 export default class NumberPad extends Vue{
-    output = '0';
+    @Prop()readonly amount!:number;
+    output = this.amount.toString();    
     countContent(event: MouseEvent){
         const button = (event.target as HTMLButtonElement);        
         const input = button.textContent as string;
@@ -54,6 +55,11 @@ export default class NumberPad extends Vue{
     }
     clear(){
         this.output = '0';
+    }
+    okAmount(){
+        this.$emit('update:amount',  parseFloat(this.output));
+        this.$emit('submit', parseFloat(this.output));
+        this.clear();
     }
     
 }
