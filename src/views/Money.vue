@@ -14,26 +14,20 @@ import Tags from '@/components/money/Tags.vue';
 import Types from '@/components/money/Types.vue';
 import Notes from '@/components/money/Notes.vue';
 import {Component, Watch} from 'vue-property-decorator';
+import model from '@/model';
+import RecordItem from '@/custom';
 
 
-type Record = {
-    setTag:string[]
-    notes: string
-    type: string
-    amount: number  //数据类型 Object | string
-    createAt?: Date  // 也可以写 类 / 构造函数
-    // ? 号代表此数据可以为空
-}
 @Component({
     components:{NumPad, Tags, Types, Notes}
 })
 
 export default class Money extends Vue{
     tags:string[] = ['衣','食','住','行'];
-    record: Record = {
-        setTag:[],notes:'', type: '+',amount: 0 
+    record: RecordItem = {
+        setTag:[],notes:'', type: '-',amount: 0 
     };
-    recordList: Record[] = JSON.parse(window.localStorage.getItem('recordlist') || '[]');
+    recordList: RecordItem[] = model.fetch();
     upSelectedTags(tags:string[]){
         this.record.setTag = tags;
     }
@@ -41,7 +35,7 @@ export default class Money extends Vue{
         this.record.notes = notes;
     }
     saveRecord(){
-        const record2: Record = JSON.parse(JSON.stringify(this.record));
+        const record2 = model.clone(this.record);
         record2.createAt = new Date();
         //做个副本，record2是新对象
         //每次都push新的record
@@ -49,7 +43,7 @@ export default class Money extends Vue{
     }
     @Watch('recordList')
     onRLChange(){
-        window.localStorage.setItem('recordlist', JSON.stringify(this.recordList));
+        model.save(this.recordList);
     }
     
    
@@ -61,9 +55,4 @@ export default class Money extends Vue{
     display: flex;
     flex-direction: column-reverse;
 }
-</style>
-
-<style lang="scss" scoped>  
-
-
 </style>
