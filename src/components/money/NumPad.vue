@@ -72,15 +72,14 @@ export default class NumberPad extends Vue{
         @extend %inner-shadow;
         font-size: 32px;
         font-family: Consolas, monospace;
-        padding: 8px 16px;
+        padding: 4px 16px;
         text-align: right;
-        min-height: 64px;
     }
     > .buttons{      
         padding: 6px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-template-rows: 56px 56px 56px 56px;
+        grid-template-rows: 54px 54px 54px 54px;
         gap: 6px 6px;
         > button{
                 background-color: #d9d9d9;

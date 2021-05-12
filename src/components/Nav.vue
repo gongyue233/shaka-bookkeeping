@@ -36,6 +36,7 @@ export default {
         justify-content:center;
         align-items: center;
         color: black;
+        font-size: 16px;
     }
     .item.selected{
         color: #1296db;

@@ -6,7 +6,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop, Watch} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 @Component
 export default class Types extends Vue{ 
     @Prop()readonly type!:string; 
@@ -24,7 +24,7 @@ export default class Types extends Vue{
     background-color: #d9d9d9;
     display: flex;
     text-align: center;
-    font-size: 22px;
+    font-size: 18px;
     > li{
         width: 50%;
         padding: 8px 0;
@@ -35,15 +35,6 @@ export default class Types extends Vue{
         &.selected{
             color: white;
             background-color: #1296db;
-        }
-        &.selected::after{
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background-color: white;
         }
     }
 }

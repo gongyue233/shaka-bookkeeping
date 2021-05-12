@@ -1,6 +1,6 @@
-import RecordItem from "./custom";
+import RecordItem from "../custom";
 const localStorageKeyName = 'recordlist';
-const model = {
+const recordListModel = {
     fetch(){ //获取数据
         return JSON.parse(window.localStorage.getItem(localStorageKeyName) || '[]') as RecordItem[];
     },
@@ -11,4 +11,4 @@ const model = {
         return JSON.parse(JSON.stringify(data));
     }
 };
-export default model;
+export default recordListModel;

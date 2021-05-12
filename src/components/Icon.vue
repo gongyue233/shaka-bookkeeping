@@ -1,4 +1,3 @@
-
 <template>
     <svg class="icon">
         <use :xlink:href="'#'+name" />
@@ -15,7 +14,8 @@ try {
 }
 export default {
     props:['name'],
-    name:'Icon',
+    //外部传入name的值来决定icon图标
+    name:'Icon', 
 }
 </script>
 

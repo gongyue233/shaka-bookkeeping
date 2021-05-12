@@ -1,9 +1,9 @@
 <template>
     <Layout class-prefix="money">
-         <NumPad :amount.sync="record.amount" @submit="saveRecord" /> 
-         <Types :type.sync="record.type" />
+         <NumPad :amount.sync="record.amount" @submit="saveRecord" />          
         <Notes @update:value="upNotes"/>
         <Tags :tagSource.sync="tags" @update:selected="upSelectedTags"/> 
+        <Types :type.sync="record.type" />
     </Layout>
 </template>
 
@@ -14,20 +14,23 @@ import Tags from '@/components/money/Tags.vue';
 import Types from '@/components/money/Types.vue';
 import Notes from '@/components/money/Notes.vue';
 import {Component, Watch} from 'vue-property-decorator';
-import model from '@/model';
+import recordListModel from '@/models/recordLiModel';
 import RecordItem from '@/custom';
+import tagListModel from '@/models/tagListModel';
 
 
+
+const tagList = tagListModel.fetch();
 @Component({
     components:{NumPad, Tags, Types, Notes}
 })
 
 export default class Money extends Vue{
-    tags:string[] = ['衣','食','住','行'];
+    tags = tagList;
     record: RecordItem = {
         setTag:[],notes:'', type: '-',amount: 0 
     };
-    recordList: RecordItem[] = model.fetch();
+    recordList: RecordItem[] = recordListModel.fetch();
     upSelectedTags(tags:string[]){
         this.record.setTag = tags;
     }
@@ -35,7 +38,7 @@ export default class Money extends Vue{
         this.record.notes = notes;
     }
     saveRecord(){
-        const record2 = model.clone(this.record);
+        const record2 = recordListModel.clone(this.record);
         record2.createAt = new Date();
         //做个副本，record2是新对象
         //每次都push新的record
@@ -43,7 +46,7 @@ export default class Money extends Vue{
     }
     @Watch('recordList')
     onRLChange(){
-        model.save(this.recordList);
+        recordListModel.save(this.recordList);
     }
     
    
