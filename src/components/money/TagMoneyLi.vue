@@ -3,7 +3,7 @@
          <div class="tagLi">
             <div class="item" 
                 v-for="tagNode in tagList" 
-                :key="tagNode.name"
+                :key="tagNode.id"
                 @click="toggle(tagNode)"
                 :class="[{'selected': currentTag===tagNode.name},classType]" 
                 >
@@ -47,7 +47,7 @@ export default class TagMoneyLi extends Vue{
             return this.$store.state.tag.earnList
         }
     }
-    toggle(obj:{name:string, tagcontent: string}){
+    toggle(obj:{name:string, tagcontent: string}){ //向外界传递被选中的tag 和 标签名
         this.$emit('update:currentTag', obj.name)
         this.$emit('update:tagName',obj.tagcontent)  
     }

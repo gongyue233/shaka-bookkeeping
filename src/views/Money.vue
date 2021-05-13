@@ -14,15 +14,17 @@
 <script lang="ts">
 import Vue from 'vue';  
 import NumPad from '@/components/money/NumPad.vue';
-import Types from '@/components/money/Types.vue';
+import Types from '@/components/Types.vue';
 import TagMoneyLi from '@/components/money/TagMoneyLi.vue';
 import Notes from '@/components/money/Notes.vue';
-import {Component, Watch} from 'vue-property-decorator';
+import {Component} from 'vue-property-decorator';
 import RecordItem from '@/help/custom';
 
 @Component({
-    components:{NumPad, Types, Notes,TagMoneyLi},    
-    
+    components:{NumPad, Types, Notes,TagMoneyLi}, 
+    created(){
+        this.$store.commit('fetchRecord')
+    }       
 })
 
 export default class Money extends Vue{    
@@ -38,8 +40,7 @@ export default class Money extends Vue{
     saveRecord(){    
         this.$store.commit('createNewRecord', this.record)
         this.$router.push({name:'Statistics'}) //记下一笔账就到统计页面，这样就清空了record
-    }
-    
+    }    
 }
 </script>
 
@@ -47,9 +48,9 @@ export default class Money extends Vue{
 .money-content{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     .tag-detail{
         overflow: auto;
+        flex-grow: 2;
     }
 }
 </style>

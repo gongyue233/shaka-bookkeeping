@@ -34,7 +34,7 @@ const routes: Array<RouteConfig> = [
     component:NotFound,
   },
   {
-    path:'/edit',
+    path:'/edit/:tagName&type',
     name:'Edit',
     component:Edit,
   }

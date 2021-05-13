@@ -1,18 +1,15 @@
 <template>
 <div>
-    <ul v-show="type==='-'">
-        <li class="tag item" v-for="tagNode in tagCost" :key="tagNode.name">
+    <ul>
+        <li class="item" 
+            v-for="tagNode in tagLi" 
+            :key="tagNode.id"
+            @click="editLabelTag(tagNode.name)">
                 <Icon :name="tagNode.name" class="label-icon" />
                 <span>{{tagNode.tagcontent}} </span>                
         </li>
-         
-    </ul>
-    <ul v-show="type==='+'">
-        <li class="tag item" v-for="tagNode in tagEarn" :key="tagNode.name">
-                <Icon :name="tagNode.name" class="label-icon" />
-                <span>{{tagNode.tagcontent}} </span>                
-        </li>
-    </ul>
+    </ul> 
+       
 </div>
 </template>
 
@@ -20,19 +17,19 @@
 import Vue from 'vue';  
 import {Component, Prop} from 'vue-property-decorator';
 
-@Component({
-    computed:{
-        tagCost(){
-            return this.$store.state.tag.costList
-        },
-        tagEarn(){
+@Component
+export default class TagLi extends Vue{
+    @Prop()readonly typeLabel!:string;  //Label.vue控制type类型
+    get tagLi(){
+        if(this.typeLabel==="+"){
             return this.$store.state.tag.earnList
+        }else{
+            return this.$store.state.tag.costList
         }
     }
-})
-export default class TagLi extends Vue{
-    //标签页的图标分成支出costList和收入earnList，接受外部参数type来决定显示
-    @Prop()readonly type!:string;         
+    editLabelTag(name:string){
+        this.$router.push({name:'Edit', params:{tagName:name,type:this.typeLabel}})
+    }        
 }
 </script>
 
