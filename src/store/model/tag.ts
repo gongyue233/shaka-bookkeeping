@@ -23,9 +23,18 @@ const state = {
             {name:'ziyuan', tagcontent: '投资'},
     ],
     currentCostTag:'canyin',
-    currentEarnTag:'qitashouru'
+    currentEarnTag:'qitashouru',
+    currentTag:''
 };
 const mutations = {
+    initTag(state:any, type:string){
+        console.log("ininTAT个")
+        if(type==="+"){
+            state.currentTag = "ziyuan"
+        }else{
+            state.currentTag = "canyin"
+        }
+    },
     setCostTag(state:any, tagName:string){
         state.currentCostTag = tagName
         console.log(state.currentCostTag)
@@ -34,14 +43,10 @@ const mutations = {
         state.currentEarnTag = tagName
         console.log(state.currentEarnTag)
     },
-    createNewCostTag(state:any, obj:{name:string, content:string}){
-        const contentArray=[];
-        for(let i=0; i++; i<state.costList.length){
-            contentArray.push(state.costList[i].tagcontent)
-        }
-        console.log(contentArray)
-        
-     }
+    setTag(state:any, tagName:string){
+        state.currentEarnTag = tagName
+        console.log(state.currentTag)
+    },
 }
 
 export default {

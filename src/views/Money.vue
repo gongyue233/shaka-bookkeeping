@@ -2,8 +2,10 @@
     <Layout class-prefix="money">
         <Types :type.sync="record.type" /> 
         <div class="tag-detail">
-        <Tags :tagSource.sync="tags" @update:selected="upSelectedTags" :typeMoney="record.type"/> 
-        </div>
+        <TagMoneyLi :typeMoney="record.type" 
+                :currentTag.sync="record.setTag"
+                @update:tagName="upTagContent" />
+        </div>        
         <Notes @update:value="upNotes"/>
         <NumPad :amount.sync="record.amount" @submit="saveRecord" />   
     </Layout>
@@ -12,37 +14,32 @@
 <script lang="ts">
 import Vue from 'vue';  
 import NumPad from '@/components/money/NumPad.vue';
-import Tags from '@/components/money/Tags.vue';
 import Types from '@/components/money/Types.vue';
+import TagMoneyLi from '@/components/money/TagMoneyLi.vue';
 import Notes from '@/components/money/Notes.vue';
 import {Component, Watch} from 'vue-property-decorator';
 import RecordItem from '@/help/custom';
-import tagListModel from '@/models/tagListModel';
-const tagList = tagListModel.fetch();
 
 @Component({
-    components:{NumPad, Tags, Types, Notes},
+    components:{NumPad, Types, Notes,TagMoneyLi},    
     
-    created(){
-        this.$store.commit('fetchRecord')
-    }
 })
 
-export default class Money extends Vue{
-    tags = tagList;
+export default class Money extends Vue{    
     record: RecordItem = {
-        setTag:[],notes:'', type: '-',amount: 0, tagName:''
-    };  
-    upSelectedTags(tags:string[]){
-        this.record.setTag = tags;
-    }
+        setTag:'',notes:'', type: '-',amount: 0, tagContent:''
+    };
     upNotes(notes:string){
         this.record.notes = notes;
+    }
+    upTagContent(con:string){
+        this.record.tagContent = con;
     }
     saveRecord(){    
         this.$store.commit('createNewRecord', this.record)
         this.$router.push({name:'Statistics'}) //记下一笔账就到统计页面，这样就清空了record
     }
+    
 }
 </script>
 
@@ -50,6 +47,7 @@ export default class Money extends Vue{
 .money-content{
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     .tag-detail{
         overflow: auto;
     }

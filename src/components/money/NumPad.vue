@@ -67,7 +67,7 @@ export default class NumberPad extends Vue{
 
 <style lang="scss" scoped>
 @import '~@/assets/commen.scss';
-.numberPad{
+.numberPad{    
     .output{
         @extend %inner-shadow;
         font-size: 30px;

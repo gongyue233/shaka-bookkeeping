@@ -1,18 +1,12 @@
 <template>
     <div>
-        <div class="tagLi" v-show="typeMoney==='-'">
-            <div class="cost item" v-for="tagNode in tagCost" :key="tagNode.name"
-            @click="toggleCost(tagNode.name)" :class="{selected: currentCostTag===tagNode.name}">
-                    <Icon :name="tagNode.name" class="label-icon" />
-                    <span>{{tagNode.tagcontent}} </span>                
-            </div>            
-        </div>
-        <div v-show="typeMoney==='+'" class="tagLi">
-            <div class="earn item" 
-                v-for="tagNode in tagEarn" 
+         <div class="tagLi">
+            <div class="item" 
+                v-for="tagNode in tagList" 
                 :key="tagNode.name"
-                @click="toggleEarn(tagNode.name)"
-                :class="{selected: currentEarnTag===tagNode.name}">
+                @click="toggle(tagNode)"
+                :class="[{'selected': currentTag===tagNode.name},classType]" 
+                >
                     <Icon :name="tagNode.name" class="label-icon" />
                     <span>{{tagNode.tagcontent}} </span>                
             </div>
@@ -22,10 +16,10 @@
 
 <script lang="ts">
 import Vue from 'vue';  
-import {Component, Prop} from 'vue-property-decorator';
+import {Component, Prop, Watch} from 'vue-property-decorator';
 
 @Component({
-    computed:{
+    computed:{        
         tagCost(){
             return this.$store.state.tag.costList
         },
@@ -38,17 +32,24 @@ import {Component, Prop} from 'vue-property-decorator';
         currentEarnTag(){
             return this.$store.state.tag.currentEarnTag
         }
-    }
+    },
 })
 export default class TagMoneyLi extends Vue{
-    @Prop()readonly typeMoney!:string;     
-
-    toggleCost(name:string){        
-        this.$store.commit('setCostTag',name)  
-
+    @Prop()readonly typeMoney!:string; 
+    @Prop()readonly currentTag?:string; 
+    classType = 'cost';      //classType，指不同type对应的tag类名
+    get tagList(){ 
+        if(this.typeMoney === "-"){
+            this.classType = "cost";  //支出时，classType值为cost，元素类名cost 
+            return this.$store.state.tag.costList
+        }else{
+            this.classType = "earn"
+            return this.$store.state.tag.earnList
+        }
     }
-    toggleEarn(name:string){
-         this.$store.commit('setEarnTag',name)  
+    toggle(obj:{name:string, tagcontent: string}){
+        this.$emit('update:currentTag', obj.name)
+        this.$emit('update:tagName',obj.tagcontent)  
     }
 }
 </script>

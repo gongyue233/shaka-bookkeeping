@@ -1,9 +1,9 @@
 type RecordItem = {
-    setTag:string[]
+    setTag:string
     notes: string
     type: string
     amount: number  
     createAt?: Date 
-    tagName?:string
+    tagContent?:string
 };
 export default RecordItem;
