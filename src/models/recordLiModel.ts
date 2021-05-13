@@ -1,4 +1,4 @@
-import RecordItem from "../custom";
+import RecordItem from "../help/custom";
 const localStorageKeyName = 'recordlist';
 const recordListModel = {
     fetch(){ //获取数据

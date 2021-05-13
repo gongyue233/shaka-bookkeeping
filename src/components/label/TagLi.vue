@@ -1,32 +1,44 @@
 <template>
-    <ul>
-        <li class="tag item" v-for="tagNode in tagHashMap" :key="tagNode.name">
+<div>
+    <ul v-show="type==='-'">
+        <li class="tag item" v-for="tagNode in tagCost" :key="tagNode.name">
+                <Icon :name="tagNode.name" class="label-icon" />
+                <span>{{tagNode.tagcontent}} </span>                
+        </li>
+         
+    </ul>
+    <ul v-show="type==='+'">
+        <li class="tag item" v-for="tagNode in tagEarn" :key="tagNode.name">
                 <Icon :name="tagNode.name" class="label-icon" />
                 <span>{{tagNode.tagcontent}} </span>                
         </li>
     </ul>
+</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';  
-import {Component, Watch} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 
-@Component
+@Component({
+    computed:{
+        tagCost(){
+            return this.$store.state.tag.costList
+        },
+        tagEarn(){
+            return this.$store.state.tag.earnList
+        }
+    }
+})
 export default class TagLi extends Vue{
-         tagHashMap = [
-            {name:'canyin', tagcontent: '餐饮'},
-            {name:'shuidianmei', tagcontent: '水电煤'},
-            {name:'tongxun', tagcontent: '通讯'},
-            {name:'xuexi', tagcontent: '学习'},
-            {name:'yiliao', tagcontent: '医疗'},
-            {name:'yule', tagcontent: '娱乐'},
-            {name:'zhufang', tagcontent: '住房'},
-        ];
+    //标签页的图标分成支出costList和收入earnList，接受外部参数type来决定显示
+    @Prop()readonly type!:string;         
 }
 </script>
 
 <style lang="scss" scoped>
-li{     
+ul{
+    li{     
         background-color: white;
         color: #333;
         border: 1px solid #d9d9d9;
@@ -43,4 +55,6 @@ li{
             margin-left: 12px;
         }
     }
+}
+
 </style>

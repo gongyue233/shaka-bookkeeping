@@ -4,5 +4,6 @@ type RecordItem = {
     type: string
     amount: number  
     createAt?: Date 
+    tagName?:string
 };
 export default RecordItem;

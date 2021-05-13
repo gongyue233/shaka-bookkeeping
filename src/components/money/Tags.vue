@@ -6,31 +6,31 @@
                 <li v-for="tag in tagSource" 
                 :key="tag" 
                 :class="{selected: selectedTags.indexOf(tag) >= 0}"
-                @click="toggle(tag)">
+                >
                 {{tag}}
                 </li>               
-            </ul>
-            
+            </ul>     
+            <tag-money-li 
+                :typeMoney="typeMoney" 
+            />
         </div> 
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
-@Component
+import TagMoneyLi from '@/components/money/TagMoneyLi.vue';
+import {Component, Prop, Watch} from 'vue-property-decorator';
+@Component({
+    components:{TagMoneyLi}
+})
 export default class Tags extends Vue{
-    @Prop() readonly tagSource: string[] | undefined; 
-   selectedTags: string[] = [];
-   toggle(tag: string){
-       const index = this.selectedTags.indexOf(tag);
-       if(index >= 0){
-           this.selectedTags.splice(index, 1);
-       }else{
-        this.selectedTags.push(tag)
-       }
-       this.$emit('update:selected', this.selectedTags);
-   }
-   create(){
+    @Prop() readonly tagSource: string[] | undefined;
+    @Prop()readonly typeMoney!:string;    
+    CostTag = 'canyin';  //被选中的标签由Tags组件传给TagMoneyLi组件
+    EarnTag = 'qitashouru';   
+
+    selectedTags: string[] = [];
+    create(){
        const name = window.prompt('请输入新标签名');
        if(name===''){
            window.alert('标签名不能为空')
@@ -39,7 +39,7 @@ export default class Tags extends Vue{
                 this.$emit('update:tagSource',[...this.tagSource, name])
            }
        }
-   }
+    }
 
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <Layout class-prefix="labels">
         <Types :type.sync="type" />  
-        <TagLi />
+        <TagLi :type="type" />
         <div class="newTag">
             <button class="newTag-bt" @click="createTag">新建标签</button>
         </div>
@@ -20,13 +20,16 @@ import tagListModel from '@/models/tagListModel';
 
 tagListModel.fetch();
 
+
 @Component({
     components:{Types, TagLi}
 })
 
+
 export default class Labels extends Vue{
     type = '-'; // type类型由外部的Label.vue控制
     tags = tagListModel.tagList;
+    
     createTag(){
         const name = window.prompt('请输入新增的标签名字')
         if(name){
