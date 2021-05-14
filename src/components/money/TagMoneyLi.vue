@@ -8,13 +8,14 @@
                 :class="[{'selected': currentTag===tagNode.name},classType]" 
                 >
                     <Icon :name="tagNode.name" class="label-icon" />
-                    <span>{{tagNode.tagcontent}} </span>                
+                    <span>{{tagNode.tagContent}} </span>                
             </div>
         </div>
     </div> 
 </template>
 
 <script lang="ts">
+import TagD from '@/help/tagd';
 import Vue from 'vue';  
 import {Component, Prop, Watch} from 'vue-property-decorator';
 
@@ -47,14 +48,16 @@ export default class TagMoneyLi extends Vue{
             return this.$store.state.tag.earnList
         }
     }
-    toggle(obj:{name:string, tagcontent: string}){ //向外界传递被选中的tag 和 标签名
+    toggle(obj:TagD){ 
+        //向外界传递被选中的tag和标签
         this.$emit('update:currentTag', obj.name)
-        this.$emit('update:tagName',obj.tagcontent)  
+        this.$emit('update:tagName', obj) 
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '~@/assets/commen.scss';
 .tagLi{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -74,7 +77,9 @@ export default class TagMoneyLi extends Vue{
         flex-direction: column;
         align-items: center;
         padding-bottom: 10px;
+
         span{
+            @extend %text;
             font-size: 16px;
         }
         .label-icon{

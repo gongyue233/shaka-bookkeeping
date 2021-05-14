@@ -4,40 +4,41 @@
             <Icon :name="'fanhuijiantou'" class="edit-icon"/>
             <span>编辑标签</span>
         </div>
-        <input v-model="editTagContent" placeholder="请输入名">
+        <input v-model="tagEdit.tagContent" placeholder="请输入标签名">
         <div class="tagArea">
-            <TagMoneyLi :currentTag.sync="tagName" 
+            <IcLi 
+            :currentTag.sync="tagEdit.name" 
             :typeMoney="type" 
-            @update:tagName="editTagCon" class="eidtTagli" />
+             class="eidtTagli"
+             />
         </div>
-        <div @click="editOk">保存</div>
-        <ConButton/>
+        
+        <ConButton @click="editOk"/>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';  
-import TagMoneyLi from '@/components/money/TagMoneyLi.vue';
-import ConButton from '@/components/Button.vue';
+import ConButton from '@/components/ConButton.vue';
+import IcLi from '@/components/edit/IcLi.vue';
 import {Component, Prop} from 'vue-property-decorator';
+import TagD from '@/help/tagd';
 
 @Component({
-    components:{TagMoneyLi,ConButton}
+    components:{IcLi,ConButton}, 
 })
 export default class Edit extends Vue{
-    tagName: string = this.$route.params.tagName;
-    type:string = this.$route.params.type; 
-    editTagContent = '';          
-    editTagCon(content:string){
-        console.log('sha')
-        console.log(this.editTagContent)
-        console.log(this.tagName)
-    }
-    editOk(){
-        
-        
-        console.log(this.editTagContent)
-        console.log(this.tagName)
+    tagEdit:TagD = {  //拷贝到vuex的当前的tag信息
+        id:this.$store.state.tag.currentTag.id, 
+        name:this.$store.state.tag.currentTag.name, 
+        tagContent:''
+    };    
+    type:string = this.$route.params.type;
+    editOk(){ 
+        console.log('没有传入参数')
+        console.log(this.tagEdit)
+        console.log(this.tagEdit.tagContent)
+        this.$store.commit('updateTag',this.tagEdit)
     }
        
 }
@@ -53,15 +54,14 @@ export default class Edit extends Vue{
         flex-direction: row;
         align-items: center;
         span{
-            font-size: 24px;
-            
+            font-size: 24px;            
             padding: 3px 0;
             padding-left:40px;
         }        
     }
     input{
         margin-top: 10px;
-        font-size: 30px;
+        font-size: 22px;
         background-color: #f5f5f5;
         padding: 4px 16px;
         text-align: left;

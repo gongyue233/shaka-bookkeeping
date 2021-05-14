@@ -19,6 +19,7 @@ import TagMoneyLi from '@/components/money/TagMoneyLi.vue';
 import Notes from '@/components/money/Notes.vue';
 import {Component} from 'vue-property-decorator';
 import RecordItem from '@/help/custom';
+import TagD from '@/help/tagd';
 
 @Component({
     components:{NumPad, Types, Notes,TagMoneyLi}, 
@@ -34,11 +35,11 @@ export default class Money extends Vue{
     upNotes(notes:string){
         this.record.notes = notes;
     }
-    upTagContent(con:string){
-        this.record.tagContent = con;
+    upTagContent(msg:TagD){  
+        this.record.tagContent = msg.tagContent;  
     }
     saveRecord(){    
-        this.$store.commit('createNewRecord', this.record)
+        this.$store.commit('createNewRecord', this.record) //记录的数据不需要tag的id
         this.$router.push({name:'Statistics'}) //记下一笔账就到统计页面，这样就清空了record
     }    
 }

@@ -1,19 +1,72 @@
 <template>
     <div>
-        
-    </div>
+         <div class="tagLi">
+            <div class="item" 
+                v-for="tagNode in tagList" 
+                :key="tagNode.name"
+                @click="toggle(tagNode)"
+                :class="[{'selected': currentTag===tagNode.name},classType]" 
+                >
+                    <Icon :name="tagNode.name" class="label-icon" />   
+            </div>
+        </div>
+    </div> 
 </template>
 
 <script lang="ts">
+import TagD from '@/help/tagd';
 import Vue from 'vue';  
-import {Component} from 'vue-property-decorator';
+import {Component, Prop, Watch} from 'vue-property-decorator';
 
 @Component
-export default class Edit extends Vue{
-    
+export default class TagMoneyLi extends Vue{
+    @Prop()readonly typeMoney!:string; 
+    @Prop()readonly currentTag?:string; 
+    classType = 'cost';      //classType，指不同type对应的tag类名
+    get tagList(){ 
+        if(this.typeMoney === "-"){
+            this.classType = "cost";  //支出时，classType值为cost，元素类名cost 
+            return this.$store.state.tag.iconCost
+        }else{
+            this.classType = "earn"
+            return this.$store.state.tag.iconEarn
+        }
+    }
+    toggle(node:{name:string, tagContent:string}){ 
+        //向外界传递被选中的图标
+        this.$emit('update:currentTag', node.name)
+    }
 }
 </script>
 
 <style lang="scss" scoped>
-
+@import "~@/assets/commen.scss";
+.tagLi{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding-top: 10px;
+    .cost.selected{
+        .label-icon{
+            color: #1296db;
+        }
+    }
+    .earn.selected{
+        .label-icon{
+            color: red;
+        }
+    }
+    .item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 10px;
+        span{
+            
+            font-size: 16px;
+        }
+        .label-icon{
+            margin-bottom: 8px;
+        }
+    }
+}
 </style>

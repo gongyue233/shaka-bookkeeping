@@ -1,6 +1,6 @@
 <template>
     <div class="newTag">
-            <button class="newTag-bt">新建标签</button>
+            <button class="newTag-bt" @click="$emit('click')">新建标签</button>
     </div>
 </template>
 

@@ -4,9 +4,9 @@
         <li class="item" 
             v-for="tagNode in tagLi" 
             :key="tagNode.id"
-            @click="editLabelTag(tagNode.name)">
+            @click="editLabelTag(tagNode)">
                 <Icon :name="tagNode.name" class="label-icon" />
-                <span>{{tagNode.tagcontent}} </span>                
+                <span>{{tagNode.tagContent}} </span>                
         </li>
     </ul> 
        
@@ -16,7 +16,7 @@
 <script lang="ts">
 import Vue from 'vue';  
 import {Component, Prop} from 'vue-property-decorator';
-
+import TagD from '@/help/tagd';
 @Component
 export default class TagLi extends Vue{
     @Prop()readonly typeLabel!:string;  //Label.vue控制type类型
@@ -27,8 +27,13 @@ export default class TagLi extends Vue{
             return this.$store.state.tag.costList
         }
     }
-    editLabelTag(name:string){
-        this.$router.push({name:'Edit', params:{tagName:name,type:this.typeLabel}})
+    editLabelTag(msg:TagD){
+        this.$router.push({name:'Edit', params:{id:JSON.stringify(msg.id), type:this.typeLabel}})
+        console.log(msg.id)
+        console.log(this.typeLabel)
+        this.$store.commit('setCurrentTah',msg)
+        // console.log(a)
+        // this.$router.push({name:'Edit', params:{tagName:name,type:this.typeLabel}})
     }        
 }
 </script>
@@ -47,6 +52,7 @@ ul{
         > span{
             padding: 0 10px;
             font-size: 16px;
+
         }
         > .label-icon{
             margin-left: 12px;

@@ -4,7 +4,7 @@
         <div class="tagArea">
         <TagLi :typeLabel="type" />
         </div> 
-        <ConButton />
+        <ConButton @click="ups" />
     </Layout>
 </template>
 
@@ -13,25 +13,21 @@ import Vue from 'vue';
 import {Component} from 'vue-property-decorator';
 import Types from '@/components/Types.vue';
 import TagLi from '@/components/label/TagLi.vue';
-import tagListModel from '@/models/tagListModel';
-import ConButton from '@/components/Button.vue';
+import ConButton from '@/components/ConButton.vue';
 
-tagListModel.fetch();
 
 @Component({
-    components:{Types, TagLi,ConButton}
+    components:{Types, TagLi,ConButton},
+    created(){
+        this.$store.commit('fetchTags')
+    }
 })
 
 export default class Labels extends Vue{
-    type = '-'; // type类型由外部的Label.vue控制
-    tags = tagListModel.tagList;
-    
-    createTag(){
-        const name = window.prompt('请输入新增的标签名字')
-        if(name){
-            const message = tagListModel.create(name);
-            alert(message)
-        }
+    type = '-'; 
+    ups(){
+        console.log('sh')
+        
     }
 }
 </script>
