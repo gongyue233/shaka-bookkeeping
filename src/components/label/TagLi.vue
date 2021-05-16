@@ -8,8 +8,7 @@
                 <Icon :name="tagNode.name" class="label-icon" />
                 <span>{{tagNode.tagContent}} </span>                
         </li>
-    </ul> 
-       
+    </ul>        
 </div>
 </template>
 
@@ -20,20 +19,22 @@ import TagD from '@/help/tagd';
 @Component
 export default class TagLi extends Vue{
     @Prop()readonly typeLabel!:string;  //Label.vue控制type类型
-    get tagLi(){
-        if(this.typeLabel==="+"){
-            return this.$store.state.tag.earnList
+    get tagLi():TagD[]{
+        if(this.typeLabel){
+            if(this.typeLabel==="+"){
+                return this.$store.state.tag.earnList
+            }else{
+                return this.$store.state.tag.costList
+            }
         }else{
-            return this.$store.state.tag.costList
+            alert('请确定是支出还是收入？')
+            return [];
         }
+        
     }
-    editLabelTag(msg:TagD){
-        this.$router.push({name:'Edit', params:{id:JSON.stringify(msg.id), type:this.typeLabel}})
-        console.log(msg.id)
-        console.log(this.typeLabel)
+    editLabelTag(msg:TagD):void{
+        this.$router.push({name:'Edit', params:{type:this.typeLabel}})        
         this.$store.commit('setCurrentTah',msg)
-        // console.log(a)
-        // this.$router.push({name:'Edit', params:{tagName:name,type:this.typeLabel}})
     }        
 }
 </script>

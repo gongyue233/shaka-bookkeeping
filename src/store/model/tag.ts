@@ -1,12 +1,22 @@
 import TagD from "@/help/tagd";
+import IconD from "@/help/icon";
 import store from "..";
 
+type TagState = {
+    costList:TagD[],
+    earnList:TagD[],
+    currentTag: TagD,
+    iconCost:IconD[],
+    iconEarn: IconD[],
+    maxCostId: number,
+    maxEarnId:number
+}
 const state = {
     costList:[
             {id:1, name:'canyin', tagContent: '餐饮'},
             {id:2, name:'shuidianmei', tagContent: '水电煤'},
             {id:3, name:'tongxun', tagContent: '通讯'},
-            {id:4, name:'xuexi', tagContent: '学习学个比'},
+            {id:4, name:'xuexi', tagContent: '学习'},
             {id:5, name:'yiliao', tagContent: '医疗'},
             {id:6, name:'yule', tagContent: '娱乐'},
             {id:7, name:'zhufang', tagContent: '住房'},
@@ -25,9 +35,8 @@ const state = {
             {id:5, name:'jixiaojiangjin', tagContent: '奖金'},
             {id:6, name:'ziyuan', tagContent: '投资'},
     ],
-
     currentTag:{},
-    iconCost:[
+    iconCost:[ //不可变的图标表
         {name:'canyin', tagContent: '餐饮'},
         {name:'shuidianmei', tagContent: '水电煤'},
         {name:'tongxun', tagContent: '通讯'},
@@ -49,54 +58,91 @@ const state = {
         {name:'jiekuan', tagContent: '借入'},
         {name:'jixiaojiangjin', tagContent: '奖金'},
         {name:'ziyuan', tagContent: '投资'},
-    ]
-};
+    ],
+    maxCostId:13,
+    maxEarnId:6
+} as TagState;
 const mutations = {  
-    fetchTags(){
-        const costList2 = JSON.parse(window.localStorage.getItem('costList') || '[]') ;
-        if(costList2.length >= 3){
-            state.costList = costList2
-        }
-    }
-    ,
-    setCurrentTah(state:any,payload:TagD){
-        state.currentTag = payload;
+    fetchTags(state:TagState):void{
+        const costList2 = window.localStorage.getItem('costList');
+        //如果不存在costList2是null
+        const earnList2 = window.localStorage.getItem('earnList');  
+        const maxCostId2 = window.localStorage.getItem('maxCostId');  
+        const maxEarnId2 = window.localStorage.getItem('maxEarnId');
+        if(costList2){ state.costList = JSON.parse(costList2)}        
+        if(earnList2){ state.earnList = JSON.parse(earnList2)}
+        if(maxCostId2){state.maxCostId =JSON.parse(maxCostId2)}
+        if(maxEarnId2){ state.maxEarnId = JSON.parse(maxEarnId2)}       
+
     },
-    updateTag(state:any, payload:TagD){
-        const textCost = state.costList.map((item: TagD) => item.tagContent);
+    setCurrentTah(state:TagState,payload:TagD):void{
+        state.currentTag = payload;
+        window.localStorage.setItem('currentTag',JSON.stringify(state.currentTag));
+    },
+    fetchCurrentTag(state:TagState):void{
+        const currentTag2 = window.localStorage.getItem('currentTag');
+        if(currentTag2){ state.currentTag = JSON.parse(currentTag2)}
+    },
+    updateTag(state:TagState, payload:{name:string, tagContent:string}):void{
+        const textCost = state.costList.map((item: TagD) => item.tagContent);//标签名列表
         const textEarn = state.earnList.map((item: TagD) => item.tagContent);
-        // if(payload.name===''){alert('请确认标签图标')};
-        // if(payload.tagContent===''){alert('请输入标签名')};  
-        if(payload.name!=='' && payload.tagContent!==''){
-            if(textCost.indexOf(state.currentTag.tagContent) >= 0){
-                if(textCost.indexOf(payload.name) >= 0){
+        const id2 = state.currentTag.id;        
+        if(payload.tagContent){
+            if(textCost.indexOf(state.currentTag.tagContent) >= 0){//原本在支出列表
+                if(textCost.indexOf(payload.tagContent) >= 0){ //新名字与支出列表的标签名重复
                     alert('标签名重复')
                 }else{
-                    state.costList[payload.id-1].tagContent = payload.tagContent;
-                    state.costList[payload.id-1].name = payload.name;
+                    state.costList[id2-1].tagContent = payload.tagContent;
+                    state.costList[id2-1].name = payload.name;
+                    store.commit('saveTags');
                 }           
-            }else{
-                if(textEarn.indexOf(payload.name) >= 0){
+            }
+            if(textEarn.indexOf(state.currentTag.tagContent) >= 0){
+                if(textEarn.indexOf(payload.tagContent) >= 0){
                     alert('标签名重复')
                 }else{
-                    state.earnList[payload.id-1].tagContent = payload.tagContent;
-                    state.earnList[payload.id-1].name = payload.name;
+                    state.earnList[id2-1].tagContent = payload.tagContent;
+                    state.earnList[id2-1].name = payload.name;
+                    store.commit('saveTags');
                 }             
             }
-            store.commit('saveTags');
-            state.currentTag = {};
-        }else if(payload.name===''){
-            alert('请确认标签图标')
+            
         }else{
             alert('请输入标签名')
-        }       
-        
+        }
     },
-    saveTags(){
+    createNewTag(state:TagState, payload:{type:string, name:string, tagContent:string}):void{
+        store.commit('fetchTags')
+        const textCost = state.costList.map((item: TagD) => item.tagContent);
+        const textEarn = state.earnList.map((item: TagD) => item.tagContent);
+        
+        if(payload.type==='-'){
+            if(textCost.indexOf(payload.tagContent) >= 0){
+                alert('标签名重复')
+            }else{
+                state.maxCostId++;
+                state.costList.push({id:state.maxCostId,name:payload.name, tagContent:payload.tagContent});
+                store.commit('saveTags');
+            }
+        }
+        if(payload.type==='+'){
+            if(textEarn.indexOf(payload.tagContent) >= 0){
+                alert('标签名重复')
+            }else{
+                state.maxEarnId++;
+                state.earnList.push({id:state.maxEarnId,name:payload.name, tagContent:payload.tagContent});
+                store.commit('saveTags');
+            }
+        }
+
+    },
+    saveTags(state:TagState):void{
         window.localStorage.setItem('costList', JSON.stringify(state.costList));
-        window.localStorage.setItem('earnList', JSON.stringify(state.earnList))
-    }    
-    
+        window.localStorage.setItem('earnList', JSON.stringify(state.earnList));
+        window.localStorage.setItem('maxCostId', JSON.stringify(state.maxCostId));
+        window.localStorage.setItem('maxEarnId', JSON.stringify(state.maxEarnId));        
+    },
+
 }
 
 export default {

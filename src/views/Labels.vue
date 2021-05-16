@@ -4,7 +4,7 @@
         <div class="tagArea">
         <TagLi :typeLabel="type" />
         </div> 
-        <ConButton @click="ups" />
+        <ConButton @click="createNewTag" :buttonText="'新建标签'" />
     </Layout>
 </template>
 
@@ -17,17 +17,16 @@ import ConButton from '@/components/ConButton.vue';
 
 
 @Component({
-    components:{Types, TagLi,ConButton},
-    created(){
-        this.$store.commit('fetchTags')
-    }
+    components:{Types, TagLi,ConButton},    
 })
 
 export default class Labels extends Vue{
     type = '-'; 
-    ups(){
-        console.log('sh')
-        
+    created():void{
+        this.$store.commit('fetchTags');
+    }
+    createNewTag():void{
+        this.$router.push({name:'NewTag', params:{typeNewTag: this.type}})
     }
 }
 </script>

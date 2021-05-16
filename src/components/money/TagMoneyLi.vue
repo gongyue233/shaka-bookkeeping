@@ -5,8 +5,7 @@
                 v-for="tagNode in tagList" 
                 :key="tagNode.id"
                 @click="toggle(tagNode)"
-                :class="[{'selected': currentTag===tagNode.name},classType]" 
-                >
+                :class="[{'selected': currentTagId===tagNode.id},classType]"                 >
                     <Icon :name="tagNode.name" class="label-icon" />
                     <span>{{tagNode.tagContent}} </span>                
             </div>
@@ -17,41 +16,31 @@
 <script lang="ts">
 import TagD from '@/help/tagd';
 import Vue from 'vue';  
-import {Component, Prop, Watch} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 
-@Component({
-    computed:{        
-        tagCost(){
-            return this.$store.state.tag.costList
-        },
-        tagEarn(){
-            return this.$store.state.tag.earnList
-        },
-        currentCostTag(){  //被选中的tag从vuex获取
-            return this.$store.state.tag.currentCostTag
-        },
-        currentEarnTag(){
-            return this.$store.state.tag.currentEarnTag
-        }
-    },
-})
+@Component
 export default class TagMoneyLi extends Vue{
     @Prop()readonly typeMoney!:string; 
-    @Prop()readonly currentTag?:string; 
-    classType = 'cost';      //classType，指不同type对应的tag类名
-    get tagList(){ 
-        if(this.typeMoney === "-"){
-            this.classType = "cost";  //支出时，classType值为cost，元素类名cost 
-            return this.$store.state.tag.costList
+    currentTagId = -1;
+    classType!:string;      //classType，指不同type对应的tag类名
+    get tagList():TagD[]{ 
+        if(this.typeMoney){
+            if(this.typeMoney === "-"){
+                this.classType = "cost";  //支出时，classType值为cost，元素类名cost 
+                return this.$store.state.tag.costList
+            }else{
+                this.classType = "earn"
+                return this.$store.state.tag.earnList
+            }
         }else{
-            this.classType = "earn"
-            return this.$store.state.tag.earnList
+            alert('请确定是支出还是收入类型？')
+            return [];
         }
+        
     }
-    toggle(obj:TagD){ 
-        //向外界传递被选中的tag和标签
-        this.$emit('update:currentTag', obj.name)
-        this.$emit('update:tagName', obj) 
+    toggle(obj:TagD):void{ 
+        this.currentTagId = obj.id;
+        this.$emit('update:tagNode', obj)     
     }
 }
 </script>

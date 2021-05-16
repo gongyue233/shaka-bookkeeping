@@ -5,5 +5,6 @@ type RecordItem = {
     amount: number  
     createAt?: Date 
     tagContent?:string
+    tagId:number
 };
 export default RecordItem;

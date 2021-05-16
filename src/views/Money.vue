@@ -3,8 +3,7 @@
         <Types :type.sync="record.type" /> 
         <div class="tag-detail">
         <TagMoneyLi :typeMoney="record.type" 
-                :currentTag.sync="record.setTag"
-                @update:tagName="upTagContent" />
+                @update:tagNode="upTagNode" />
         </div>        
         <Notes @update:value="upNotes"/>
         <NumPad :amount.sync="record.amount" @submit="saveRecord" />   
@@ -22,24 +21,27 @@ import RecordItem from '@/help/custom';
 import TagD from '@/help/tagd';
 
 @Component({
-    components:{NumPad, Types, Notes,TagMoneyLi}, 
-    created(){
-        this.$store.commit('fetchRecord')
-    }       
+    components:{NumPad, Types, Notes,TagMoneyLi},          
 })
 
 export default class Money extends Vue{    
     record: RecordItem = {
-        setTag:'',notes:'', type: '-',amount: 0, tagContent:''
+        tagId:-1 ,setTag:'',tagContent:'',notes:'', type: '-',amount: 0 
     };
-    upNotes(notes:string){
+    created():void{
+        this.$store.commit('fetchRecord');
+        this.$store.commit('fetchTags')
+    }
+    upNotes(notes:string):void{
         this.record.notes = notes;
     }
-    upTagContent(msg:TagD){  
-        this.record.tagContent = msg.tagContent;  
+    upTagNode(msg:TagD):void{  
+        this.record.tagContent = msg.tagContent;
+        this.record.setTag = msg.name;  
+        this.record.tagId = msg.id
     }
-    saveRecord(){    
-        this.$store.commit('createNewRecord', this.record) //记录的数据不需要tag的id
+    saveRecord():void{    
+        this.$store.commit('createNewRecord', this.record) 
         this.$router.push({name:'Statistics'}) //记下一笔账就到统计页面，这样就清空了record
     }    
 }

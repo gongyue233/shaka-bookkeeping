@@ -19,7 +19,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import TagMoneyLi from '@/components/money/TagMoneyLi.vue';
-import {Component, Prop, Watch} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 @Component({
     components:{TagMoneyLi}
 })
@@ -30,7 +30,7 @@ export default class Tags extends Vue{
     EarnTag = 'qitashouru';   
 
     selectedTags: string[] = [];
-    create(){
+    create():void{
        const name = window.prompt('请输入新标签名');
        if(name===''){
            window.alert('标签名不能为空')

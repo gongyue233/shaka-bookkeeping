@@ -7,12 +7,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Emit, Watch} from 'vue-property-decorator';
+import {Component, Watch} from 'vue-property-decorator';
 @Component
 export default class Notes extends Vue{
    note = '';
    @Watch('note')
-   onNoteChanged(note: string){
+   onNoteChanged(note: string):void{
        this.$emit('update:value', note)
    }
 

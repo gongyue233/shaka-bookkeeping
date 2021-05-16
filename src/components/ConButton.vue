@@ -1,8 +1,16 @@
 <template>
     <div class="newTag">
-            <button class="newTag-bt" @click="$emit('click')">新建标签</button>
+            <button class="newTag-bt" @click="$emit('click')">{{this.buttonText}} </button>
     </div>
 </template>
+<script lang="ts">
+import Vue from 'vue';
+import {Component,Prop} from 'vue-property-decorator';
+@Component
+export default class ConButton extends Vue{
+    @Prop()readonly buttonText!:string;
+}
+</script>
 
 <style lang="scss" scoped>
 .newTag{

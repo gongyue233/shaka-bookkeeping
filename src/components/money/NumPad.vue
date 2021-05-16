@@ -27,7 +27,7 @@ import {Component, Prop} from 'vue-property-decorator';
 export default class NumberPad extends Vue{
     @Prop()readonly amount!:number;
     output = this.amount.toString();    
-    countContent(event: MouseEvent){
+    countContent(event: MouseEvent):void{
         const button = (event.target as HTMLButtonElement);        
         const input = button.textContent as string;
         if(this.output.length >= 16){return }//计算最大16位
@@ -44,7 +44,7 @@ export default class NumberPad extends Vue{
         // 已经有小数点再次输入小数点
         this.output += input;        
     }
-    remove(){
+    remove():void{
         //this.output = this.output.substring(0, this.output.length-1)
         //也可以使用slice
         if(this.output.length === 1){
@@ -53,10 +53,10 @@ export default class NumberPad extends Vue{
             this.output = this.output.slice(0, -1);
         }
     }
-    clear(){
+    clear():void{
         this.output = '0';
     }
-    okAmount(){
+    okAmount():void{
         this.$emit('update:amount',  parseFloat(this.output));
         this.$emit('submit', parseFloat(this.output));
         this.clear();

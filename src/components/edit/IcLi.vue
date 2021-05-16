@@ -4,7 +4,7 @@
             <div class="item" 
                 v-for="tagNode in tagList" 
                 :key="tagNode.name"
-                @click="toggle(tagNode)"
+                @click="toggle(tagNode.name)"
                 :class="[{'selected': currentTag===tagNode.name},classType]" 
                 >
                     <Icon :name="tagNode.name" class="label-icon" />   
@@ -14,27 +14,32 @@
 </template>
 
 <script lang="ts">
-import TagD from '@/help/tagd';
 import Vue from 'vue';  
-import {Component, Prop, Watch} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
+import IconD from "@/help/icon";
 
 @Component
-export default class TagMoneyLi extends Vue{
-    @Prop()readonly typeMoney!:string; 
-    @Prop()readonly currentTag?:string; 
-    classType = 'cost';      //classType，指不同type对应的tag类名
-    get tagList(){ 
-        if(this.typeMoney === "-"){
+export default class TagMoneyLi extends Vue{    
+    @Prop({required:true})readonly typeEdit!:string;
+    @Prop()readonly currentTag!:string;   
+    classType = 'cost';     
+    get tagList():IconD[]{ 
+        if(this.typeEdit){            
+            if(this.typeEdit === "-"){
             this.classType = "cost";  //支出时，classType值为cost，元素类名cost 
             return this.$store.state.tag.iconCost
-        }else{
+            }else{
             this.classType = "earn"
             return this.$store.state.tag.iconEarn
-        }
+            }
+        }else{            
+            alert('没有确认类型');
+            return [];
+        }        
     }
-    toggle(node:{name:string, tagContent:string}){ 
+    toggle(tagContent:string):void{ 
         //向外界传递被选中的图标
-        this.$emit('update:currentTag', node.name)
+        this.$emit('update:currentTag', tagContent)
     }
 }
 </script>

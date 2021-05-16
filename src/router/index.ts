@@ -5,6 +5,7 @@ import Labels from '@/views/Labels.vue';
 import Statistics from '@/views/Statistics.vue';
 import NotFound from '../components/NotFound.vue';
 import Edit from '@/views/Edit.vue';
+import NewTag from '@/views/NewTag.vue';
 
 Vue.use(VueRouter)
 
@@ -34,9 +35,14 @@ const routes: Array<RouteConfig> = [
     component:NotFound,
   },
   {
-    path:'/edit/:id&type',
+    path:'/edit/type=:type',
     name:'Edit',
     component:Edit,
+  },
+  {
+    path:'/new-tag/type=:typeNewTag',
+    name:'NewTag',
+    component:NewTag
   }
 ]
 
