@@ -57,9 +57,6 @@ export default class Edit extends Vue{
     }
     .tagArea{
         padding-top: 30px;
-        .eidtTagli ::v-deep .tagLi .item span{
-            display: none;
-        }
     }
     
 }

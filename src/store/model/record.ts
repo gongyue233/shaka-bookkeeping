@@ -27,6 +27,7 @@ const mutations = {
             state.recordCostList.push(record2)
         }
         store.commit('saveRecord') 
+        
     }
 }
 
