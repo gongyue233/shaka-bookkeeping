@@ -20,7 +20,7 @@ const mutations = {
     },
     createNewRecord(state:RecordState,newRecord:RecordItem):void{        
         const record2 = JSON.parse(JSON.stringify(newRecord));
-        record2.createAt = new Date();
+        record2.createAt = new Date().toISOString;
         if(record2.type==="+"){
             state.recordEarnList.push(record2)  
         }else{

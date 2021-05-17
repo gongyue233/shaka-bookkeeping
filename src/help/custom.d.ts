@@ -1,10 +1,8 @@
-type RecordItem = {
-    
+type RecordItem = {    
     notes: string
     type: string
     amount: number  
-    createAt?: Date 
-    
+    createAt?: string    
     tagId:number
 };
 export default RecordItem;

@@ -18,7 +18,6 @@ import ConButton from '@/components/ConButton.vue';
 import IcLi from '@/components/edit/IcLi.vue';
 import Fanhui from '@/components/edit/Fanhui.vue';
 import {Component} from 'vue-property-decorator';
-
 @Component({
     components:{IcLi,ConButton,Fanhui},    
 })
@@ -29,8 +28,13 @@ export default class Edit extends Vue{
         tagContent:''
     };  
     created():void{
-        this.$store.commit('fetchCurrentTag')
-        this.tagEdit.name = this.$store.state.tag.currentTag.name;
+        this.$store.commit('fetchCurrentTag');
+        const currentTag = this.$store.state.tag.currentTag;
+        if (!currentTag) {
+            this.$router.replace('/404');
+        }        
+        this.tagEdit.tagContent = currentTag.tagContent;
+        this.tagEdit.name =currentTag.name;
     }  
     editOk():void{   
         this.$store.commit('updateTag',this.tagEdit)

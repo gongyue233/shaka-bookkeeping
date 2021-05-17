@@ -1,6 +1,9 @@
 import TagD from "@/help/tagd";
 import IconD from "@/help/icon";
 import store from "..";
+import creCostId from '@/lib/creCostId';
+import creEarnId from '@/lib/creEarnId';
+
 
 type TagState = {
     costList:TagD[],
@@ -8,8 +11,6 @@ type TagState = {
     currentTag: TagD,
     iconCost:IconD[],
     iconEarn: IconD[],
-    maxCostId: number,
-    maxEarnId:number
 }
 const state = {
     costList:[
@@ -36,7 +37,7 @@ const state = {
             {id:6, name:'ziyuan', tagContent: '投资'},
     ],
     currentTag:{},
-    iconCost:[ //不可变的图标表
+    iconCost:Object.freeze([ //不可变的图标表
         {name:'canyin', tagContent: '餐饮'},
         {name:'shuidianmei', tagContent: '水电煤'},
         {name:'tongxun', tagContent: '通讯'},
@@ -50,29 +51,23 @@ const state = {
         {name:'jiaotong', tagContent: '交通'},
         {name:'gouwu', tagContent: '购物'},           
         {name:'fushi', tagContent: '服饰'},    
-    ],
-    iconEarn:[
+    ]),
+    iconEarn:Object.freeze([
         {name:'qitashouru', tagContent: '其它'},
         {name:'licaishouyi', tagContent: '理财'},
         {name:'gongzi', tagContent: '工资'},
         {name:'jiekuan', tagContent: '借入'},
         {name:'jixiaojiangjin', tagContent: '奖金'},
         {name:'ziyuan', tagContent: '投资'},
-    ],
-    maxCostId:13,
-    maxEarnId:6
+    ]),
 } as TagState;
 const mutations = {  
     fetchTags(state:TagState):void{
         const costList2 = window.localStorage.getItem('costList');
         //如果不存在costList2是null
-        const earnList2 = window.localStorage.getItem('earnList');  
-        const maxCostId2 = window.localStorage.getItem('maxCostId');  
-        const maxEarnId2 = window.localStorage.getItem('maxEarnId');
+        const earnList2 = window.localStorage.getItem('earnList');   
         if(costList2){ state.costList = JSON.parse(costList2)}        
-        if(earnList2){ state.earnList = JSON.parse(earnList2)}
-        if(maxCostId2){state.maxCostId =JSON.parse(maxCostId2)}
-        if(maxEarnId2){ state.maxEarnId = JSON.parse(maxEarnId2)}       
+        if(earnList2){ state.earnList = JSON.parse(earnList2)}     
 
     },
     setCurrentTah(state:TagState,payload:TagD):void{
@@ -105,8 +100,7 @@ const mutations = {
                     state.earnList[id2-1].name = payload.name;
                     store.commit('saveTags');
                 }             
-            }
-            
+            }            
         }else{
             alert('请输入标签名')
         }
@@ -119,8 +113,8 @@ const mutations = {
             if(textCost.indexOf(payload.tagContent) >= 0){
                 alert('标签名重复')
             }else{
-                state.maxCostId++;
-                state.costList.push({id:state.maxCostId,name:payload.name, tagContent:payload.tagContent});
+                const costId = creCostId();
+                state.costList.push({id:costId,name:payload.name, tagContent:payload.tagContent});
                 store.commit('saveTags');
             }
         }
@@ -128,18 +122,15 @@ const mutations = {
             if(textEarn.indexOf(payload.tagContent) >= 0){
                 alert('标签名重复')
             }else{
-                state.maxEarnId++;
-                state.earnList.push({id:state.maxEarnId,name:payload.name, tagContent:payload.tagContent});
+                const earnId = creEarnId();
+                state.earnList.push({id:earnId,name:payload.name, tagContent:payload.tagContent});
                 store.commit('saveTags');
             }
         }
-
     },
     saveTags(state:TagState):void{
         window.localStorage.setItem('costList', JSON.stringify(state.costList));
-        window.localStorage.setItem('earnList', JSON.stringify(state.earnList));
-        window.localStorage.setItem('maxCostId', JSON.stringify(state.maxCostId));
-        window.localStorage.setItem('maxEarnId', JSON.stringify(state.maxEarnId));        
+        window.localStorage.setItem('earnList', JSON.stringify(state.earnList));    
     },
 
 }
