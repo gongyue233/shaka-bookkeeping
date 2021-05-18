@@ -1,5 +1,7 @@
 import RecordItem from "@/help/custom";
 import store from "..";
+import clone from '@/lib/clone';
+import creId from '@/lib/creId';
 type RecordState={
     recordCostList:RecordItem[],
     recordEarnList:RecordItem[]
@@ -19,15 +21,12 @@ const mutations = {
         window.localStorage.setItem('recordCostList', JSON.stringify(state.recordCostList));
     },
     createNewRecord(state:RecordState,newRecord:RecordItem):void{        
-        const record2 = JSON.parse(JSON.stringify(newRecord));
-        record2.createAt = new Date().toISOString;
-        if(record2.type==="+"){
-            state.recordEarnList.push(record2)  
-        }else{
-            state.recordCostList.push(record2)
-        }
-        store.commit('saveRecord') 
-        
+        const record2 = clone(newRecord)
+        record2.createAt = new Date().toISOString(); 
+        record2.id = creId();       
+        if(record2.type==="+"){state.recordEarnList.push(record2)}
+        if(record2.type==='-'){state.recordCostList.push(record2)}
+        store.commit('saveRecord')         
     }
 }
 

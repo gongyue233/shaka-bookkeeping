@@ -67,7 +67,7 @@ const mutations = {
         //如果不存在costList2是null
         const earnList2 = window.localStorage.getItem('earnList');   
         if(costList2){ state.costList = JSON.parse(costList2)}        
-        if(earnList2){ state.earnList = JSON.parse(earnList2)}     
+        if(earnList2){ state.earnList = JSON.parse(earnList2)}   
 
     },
     setCurrentTah(state:TagState,payload:TagD):void{
