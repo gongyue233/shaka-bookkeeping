@@ -25,7 +25,7 @@ import Vue from 'vue';
 import {Component, Prop} from 'vue-property-decorator';
 @Component
 export default class NumberPad extends Vue{
-    @Prop()readonly amount!:number;
+    @Prop(Number)readonly amount!:number;
     output = this.amount.toString();    
     countContent(event: MouseEvent):void{
         const button = (event.target as HTMLButtonElement);        

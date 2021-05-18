@@ -18,7 +18,6 @@ import TagMoneyLi from '@/components/money/TagMoneyLi.vue';
 import Notes from '@/components/money/Notes.vue';
 import {Component} from 'vue-property-decorator';
 import RecordItem from '@/help/custom';
-import TagD from '@/help/tagd';
 
 @Component({
     components:{NumPad, Types, Notes,TagMoneyLi},          

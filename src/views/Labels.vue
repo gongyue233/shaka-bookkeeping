@@ -39,6 +39,7 @@ export default class Labels extends Vue{
 </style>
 <style lang="scss" scoped>
 .tagArea{
+    max-height: 80%;
     overflow: auto;
 } 
 </style>
