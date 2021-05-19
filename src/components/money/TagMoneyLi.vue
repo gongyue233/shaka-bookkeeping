@@ -5,7 +5,7 @@
                 v-for="tagNode in tagList" 
                 :key="tagNode.id"
                 @click="toggle(tagNode.id)"
-                :class="[{'selected': currentTagId===tagNode.id},classType]"                 >
+                :class="[{'selected': currentTagId===tagNode.id}, classType]"                 >
                     <Icon :name="tagNode.name" class="label-icon" />
                     <span>{{tagNode.tagContent}} </span>                
             </div>
@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import TagD from '@/help/tagd';
+import clone from '@/lib/clone';
 import Vue from 'vue';  
 import {Component, Prop} from 'vue-property-decorator';
 
@@ -24,17 +25,19 @@ export default class TagMoneyLi extends Vue{
     @Prop()readonly currentTagId!:number;
     classType!:string;      //classType，指不同type对应的tag类名
     get tagList():TagD[]{ 
-        if(this.typeMoney){
-            if(this.typeMoney === "-"){
-                this.classType = "cost";  //支出时，classType值为cost，元素类名cost 
-                return this.$store.state.tag.costList
-            }else{
-                this.classType = "earn"
-                return this.$store.state.tag.earnList
-            }
-        }else{
+        if(this.typeMoney!=='-' && this.typeMoney!=='+'){
             alert('请确定是支出还是收入类型？')
-            return [];
+            return [];            
+        }else{
+            if(this.typeMoney==='-'){
+                this.classType = "cost";
+            }else{
+                this.classType = "earn";
+            }        
+            const tagList = clone(this.$store.state.tag.tagList)
+                            .filter((r: TagD)=>r.type===this.typeMoney);
+            this.$emit('update:currentTagId', tagList[0].id)
+            return tagList;                   
         }        
     }
     toggle(msg:number):void{ 

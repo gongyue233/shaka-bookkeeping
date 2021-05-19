@@ -15,22 +15,20 @@
 <script lang="ts">
 import Vue from 'vue';  
 import {Component, Prop} from 'vue-property-decorator';
+import clone from '@/lib/clone';
 import TagD from '@/help/tagd';
 @Component
 export default class TagLi extends Vue{
     @Prop()readonly typeLabel!:string;  //Label.vue控制type类型
-    get tagLi():TagD[]{
-        if(this.typeLabel){
-            if(this.typeLabel==="+"){
-                return this.$store.state.tag.earnList
-            }else{
-                return this.$store.state.tag.costList
-            }
-        }else{
-            alert('请确定是支出还是收入？')
-            return [];
-        }
-        
+    get tagLi():TagD[]{ 
+        if(this.typeLabel!=='-' && this.typeLabel!=='+'){
+            alert('请确定是支出还是收入类型？')
+            return [];            
+        }else{            
+            const tagList = clone(this.$store.state.tag.tagList)
+                            .filter((r: TagD)=>r.type===this.typeLabel)
+            return tagList;                   
+        }       
     }
     editLabelTag(msg:TagD):void{
         this.$router.push({name:'Edit', params:{type:this.typeLabel}})        

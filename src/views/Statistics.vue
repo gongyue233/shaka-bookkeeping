@@ -7,9 +7,9 @@
                     <h3>{{handleDay(group.title)}}  <span>{{group.total}} </span></h3> 
                     <ol class="items">
                         <li v-for="item in group.items" :key="item.id" class="item">
-                            <Icon :name="getIcon(item.tagId, item.type)" class="label-icon" />
+                            <Icon :name="getIcon(item.tagId)" class="label-icon" />
                             <div class="tagContent">
-                                {{getTagContent(item.tagId, item.type)}} <br> 
+                                {{getTagContent(item.tagId)}} <br> 
                                 <span class="notes">{{item.notes}}</span>
                             </div> 
                             <span class="amount">{{item.amount}} </span>                           
@@ -30,6 +30,7 @@ import RecordItem from '@/help/custom';
 import dayjs from 'dayjs'; 
 import clone from '@/lib/clone';
 import HashD from '@/help/HashD';
+import TagD from '@/help/tagd';
 
 @Component({
     components:{Icon, Types}
@@ -39,10 +40,13 @@ export default class Statistics extends Vue{
     created(){
         this.$store.commit('fetchRecord');
     }    
-    get recordList():RecordItem[]{      
-        return this.$store.state.record.recordList      
+    get recordList():RecordItem[]{    //依据类型返回支出或收入的记录  
+        const newRecordList = clone(this.$store.state.record.recordList)
+            .filter((r: TagD)=>r.type===this.typeSta);
+            // filter过滤出是支出还是收入
+        return newRecordList      
     }
-    handleDay(msg:string): string{
+    handleDay(msg:string): string{  //处理时间的显示
         const day = dayjs(msg);
         const now = dayjs();
         if(msg==='无'){return '无'}
@@ -58,12 +62,11 @@ export default class Statistics extends Vue{
             return day.format('YYYY年M月D日');
         }
     }
-    get groupList(): HashD[] {
+    get groupList(): HashD[] {  // 得到有相同createAt 的具体记录的哈希表，一个createAt对应多个记录
         const {recordList} = this;
         if(recordList.length === 0){ return [{ title:'无', items:[]}]}
         const newRecordList = clone(recordList)
-            .filter(r=>r.type===this.typeSta)  // filter过滤出是支出还是收入
-            .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf() );
+                    .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
         // 排序，为了不影响原来的对象使用clone函数
         const result: HashD[] = [
             {title: dayjs(newRecordList[0].createAt).format('YYYY-M-D'),
@@ -84,14 +87,11 @@ export default class Statistics extends Vue{
 
         return result;
     }
-    getIcon(id: number, ty: string): string | undefined{
-        if(ty==="-"){return this.$store.state.tag.costList[id-1].name}
-        if(ty==='+'){return this.$store.state.tag.earnList[id-1].name}
-        
+    getIcon(id: number): string | undefined{  //得到图标
+        return this.$store.state.tag.tagList[id].name
     }     
-    getTagContent(id: number, ty: string): string | undefined{
-        if(ty==="-"){return this.$store.state.tag.costList[id-1].tagContent}
-        if(ty==="+"){return this.$store.state.tag.earnList[id-1].tagContent}
+    getTagContent(id: number): string | undefined{ //标签名
+        return this.$store.state.tag.tagList[id].tagContent
     }         
 }
 </script>
@@ -119,7 +119,7 @@ export default class Statistics extends Vue{
             .item{
                 background-color: white;                
                 border: 1px solid #d9d9d9;
-                min-height: 48px;
+                min-height: 52px;
                 border-radius: 8px;   
                 display: flex;                
                 align-items: center;

@@ -25,7 +25,7 @@ import RecordItem from '@/help/custom';
 
 export default class Money extends Vue{    
     record: RecordItem = {
-        tagId: 1 ,notes:'', type: '-',amount: 0 
+        tagId: 0,notes:'', type: '-',amount: 0 
     };
     created():void{
         this.$store.commit('fetchRecord');
