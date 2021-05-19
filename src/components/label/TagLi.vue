@@ -53,7 +53,6 @@ ul{
         > span{
             padding: 0 10px;
             font-size: 16px;
-
         }
         > .label-icon{
             margin-left: 12px;

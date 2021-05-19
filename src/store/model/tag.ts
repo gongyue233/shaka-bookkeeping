@@ -107,6 +107,7 @@ const mutations = {
     },
     createNewTag(state:TagState, payload:{type:string, name:string, tagContent:string}):void{
         store.commit('fetchTags')
+        if(payload.tagContent===''){ alert('未输入标签名');return;}
         const textCost = state.costList.map((item: TagD) => item.tagContent);
         const textEarn = state.earnList.map((item: TagD) => item.tagContent);        
         if(payload.type==='-'){

@@ -23,7 +23,7 @@ import {Component} from 'vue-property-decorator';
     components:{IcLi,ConButton,Fanhui},    
 })
 export default class NewTag extends Vue{ 
-    typeNT = this.$route.params.typeNewTag;
+    typeNT: string = this.$route.params.typeNewTag;
     tagNewTag = {  
         type:'-',       
         name:'', 
@@ -40,11 +40,11 @@ export default class NewTag extends Vue{
         }else{
             this.$router.push({name:'404'})
         }
-        this.$store.commit('fetchTags'); 
-       
+        this.$store.commit('fetchTags');        
     }
     creatNT():void{
-        this.$store.commit('createNewTag', this.tagNewTag);        
+        this.$store.commit('createNewTag', this.tagNewTag);   
+        this.$router.back()     
     }    
 }
 </script>

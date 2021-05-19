@@ -68,7 +68,7 @@ export default class NumberPad extends Vue{
 <style lang="scss" scoped>
 .numberPad{    
     .output{       
-        font-size: 30px;
+        font-size: 28px;
         font-family: Consolas, monospace;
         padding: 4px 16px;
         text-align: right;
@@ -77,8 +77,8 @@ export default class NumberPad extends Vue{
         padding: 6px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        grid-template-rows: 54px 54px 54px 54px;
-        gap: 6px 6px;
+        grid-template-rows: 44px 44px 44px 44px;
+        gap: 4px 4px;
         > button{
                 background-color: #d9d9d9;
                 border: none;

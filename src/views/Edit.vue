@@ -38,13 +38,11 @@ export default class Edit extends Vue{
     }  
     editOk():void{   
         this.$store.commit('updateTag',this.tagEdit)
-        //this.$router.back()
+        this.$router.back()
     }
     editback():void{
         this.$router.back()        
-    }
-    
-       
+    }   
 }
 </script>
 <style lang="scss" scoped>

@@ -4,4 +4,4 @@ function creEarnId(){
     window.localStorage.setItem('MaxEarnId', MaxEarnId.toString());
     return MaxEarnId;
 }
-export default creEarnId;
+export default creEarnId; // earn收入标签 的id号

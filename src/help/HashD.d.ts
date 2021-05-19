@@ -1,4 +1,4 @@
 import RecordItem from "./custom";
 
-type HashD = { title: string, total?:number, items: RecordItem[]};
+type HashD = { total?: number, title: string,  items: RecordItem[]};
 export default HashD;

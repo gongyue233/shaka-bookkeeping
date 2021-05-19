@@ -4,7 +4,7 @@
         <div class="tagArea">
         <TagLi :typeLabel="type" />
         </div> 
-        <ConButton @click="createNewTag" :buttonText="'新建标签'" />
+        <ConButton @click="createNewTag" :buttonText="'新建标签'" class="new" />
     </Layout>
 </template>
 
@@ -27,6 +27,7 @@ export default class Labels extends Vue{
     }
     createNewTag():void{
         this.$router.push({name:'NewTag', params:{typeNewTag: this.type}})
+        
     }
 }
 </script>
@@ -41,5 +42,5 @@ export default class Labels extends Vue{
 .tagArea{
     max-height: 80%;
     overflow: auto;
-} 
+}  
 </style>
