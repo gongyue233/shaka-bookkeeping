@@ -1,4 +1,4 @@
-let MaxCostId:number = parseInt(window.localStorage.getItem('MaxTagId') || '18');
+let MaxCostId:number = parseInt(window.localStorage.getItem('MaxTagId') || '18') || 18;
 function creTagId(){
     MaxCostId++;
     window.localStorage.setItem('MaxTagId', MaxCostId.toString());

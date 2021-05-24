@@ -1,6 +1,7 @@
 <template>
     <Layout class-prefix="statistics">
         <Types :type.sync="typeSta"/> 
+        <Echart :option="op" />
         <div>
             <ol class="groups">
                 <li v-for="group in groupList" :key="group.title" class="group">
@@ -25,22 +26,25 @@
 import Vue from 'vue';  
 import Icon from '@/components/Icon.vue';
 import Types from '@/components/Types.vue';
-import {Component, Prop} from 'vue-property-decorator';
+import {Component, Watch} from 'vue-property-decorator';
 import RecordItem from '@/help/custom';
 import dayjs from 'dayjs'; 
 import clone from '@/lib/clone';
 import HashD from '@/help/HashD';
 import TagD from '@/help/tagd';
-
+import Echart from '@/views/Echarts.vue';
+import { EChartsOption } from 'echarts';
+import _, { get } from 'lodash';
 @Component({
-    components:{Icon, Types}
+    components:{Icon, Types, Echart}
 })
 export default class Statistics extends Vue{
     typeSta = '-';
+    
     created(){
         this.$store.commit('fetchRecord');
     }    
-    get recordList():RecordItem[]{    //依据类型返回支出或收入的记录  
+    get recordList():RecordItem[]{    //依据类型返回支出或收入的记录      
         const newRecordList = clone(this.$store.state.record.recordList)
             .filter((r: TagD)=>r.type===this.typeSta);
             // filter过滤出是支出还是收入
@@ -49,7 +53,7 @@ export default class Statistics extends Vue{
     handleDay(msg:string): string{  //处理时间的显示
         const day = dayjs(msg);
         const now = dayjs();
-        if(msg==='无'){return '无'}
+        if(msg==='目前没有记录'){return '目前没有记录'}
         if(day.isSame(now,'day')){
             return '今天'
         }else if(day.isSame(now.subtract(1, 'day'), 'day')){
@@ -64,12 +68,13 @@ export default class Statistics extends Vue{
     }
     get groupList(): HashD[] {  // 得到有相同createAt 的具体记录的哈希表，一个createAt对应多个记录
         const {recordList} = this;
-        if(recordList.length === 0){ return [{ title:'无', items:[]}]}
+        if(recordList.length === 0){ return [{ title:'目前没有记录', items:[] ,total: 0}]}
         const newRecordList = clone(recordList)
                     .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
         // 排序，为了不影响原来的对象使用clone函数
         const result: HashD[] = [
             {title: dayjs(newRecordList[0].createAt).format('YYYY-M-D'),
+            total: 0,
             items:[newRecordList[0]]}
         ];
         for(let i = 1; i < newRecordList.length; i++){ 
@@ -78,7 +83,7 @@ export default class Statistics extends Vue{
             if(dayjs(itemLast.title).isSame(dayjs(current.createAt), 'day')){
                 itemLast.items.push(current);                
             }else{  
-                result.push({title: dayjs(current.createAt).format('YYYY-M-D'), items:[current]})
+                result.push({title: dayjs(current.createAt).format('YYYY-M-D'),total:0, items:[current]})
             }
         }        
         result.forEach(group=>{            
@@ -92,7 +97,63 @@ export default class Statistics extends Vue{
     }     
     getTagContent(id: number): string | undefined{ //标签名
         return this.$store.state.tag.tagList[id].tagContent
-    }         
+    }     
+    get op():EChartsOption{ 
+        const arrayChart = [];
+        for(let i=0; i <= 29; i++){ //遍历过去的30天
+            const dateString = dayjs().subtract( i, 'day').format('YYYY-M-D');
+            const found = _.find(this.groupList, {
+                title: dateString
+            });// 找到title=dateString的数据
+            let value2 = 0;
+            if(found){
+                value2 = found.total;
+            }else{
+                value2 = 0
+            }
+            arrayChart.push({
+                date: dateString, value:value2
+            });
+        }
+        const keys = arrayChart.map(item => item.date);
+        const valuesChart = arrayChart.map(item => item.value)
+        return {            
+            grid:{
+                left: '10px',
+                right: '10px'
+            },            
+            legend: {
+                data:['bug']
+            },
+            xAxis: {
+                type: 'category',
+                data: keys,
+                axisTick:{
+                    alignWithLabel: true
+                }
+            },
+            color:'#1296db',
+            yAxis: {
+                type: 'value',
+                show:false
+            },
+            series: [{
+                name:'bug',
+                data: valuesChart,
+                type: 'line',  
+                symbolSize: 10,   
+            }],   
+            tooltip:{
+                show: true,
+                triggerOn: 'mousemove|click',
+                position: 'top',
+                formatter: '{c}',
+                backgroundColor:'white',
+            }
+        }
+    }  
+
+   
 }
 </script>
 <style lang="scss">

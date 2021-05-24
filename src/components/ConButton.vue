@@ -16,7 +16,7 @@ export default class ConButton extends Vue{
 .newTag{
     text-align: center;    
     > .newTag-bt{
-        margin-top: 8px;
+        margin: 8px;
         background-color: #1296db;
         color: white;
         border-radius: 4px;

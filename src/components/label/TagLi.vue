@@ -6,7 +6,7 @@
             :key="tagNode.id"
             @click="editLabelTag(tagNode)">
                 <Icon :name="tagNode.name" class="label-icon" />
-                <span>{{tagNode.tagContent}} </span>                
+                <span>{{tagNode.tagContent}} </span>            
         </li>
     </ul>        
 </div>
@@ -32,7 +32,7 @@ export default class TagLi extends Vue{
     }
     editLabelTag(msg:TagD):void{
         this.$router.push({name:'Edit', params:{type:this.typeLabel}})        
-        this.$store.commit('setCurrentTah',msg)
+        this.$store.commit('setCurrentTag',msg)
     }        
 }
 </script>

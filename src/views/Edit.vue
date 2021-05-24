@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue from 'vue';  
 import ConButton from '@/components/ConButton.vue';
-import IcLi from '@/components/edit/IcLi.vue';
+import IcLi from '@/components/IcLi.vue';
 import Fanhui from '@/components/edit/Fanhui.vue';
 import {Component} from 'vue-property-decorator';
 @Component({
@@ -28,7 +28,8 @@ export default class Edit extends Vue{
         tagContent:''
     };  
     created():void{
-        this.$store.commit('fetchCurrentTag');
+        this.$store.commit('fetchCurrentTag'); 
+        //是通过vuex的currentTag得知当前正在被编辑的标签信息
         const currentTag = this.$store.state.tag.currentTag;
         if (!currentTag) {
             this.$router.replace('/404');
@@ -43,10 +44,15 @@ export default class Edit extends Vue{
     editback():void{
         this.$router.back()        
     }   
+    editDe():void{
+        console.log('x')
+        this.$store.commit('deleteTag');
+    }
 }
 </script>
 <style lang="scss" scoped>
 .edit{
+    position: relative;
     height: 100vh;    
     input{
         margin-top: 10px;

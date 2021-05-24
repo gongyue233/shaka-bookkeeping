@@ -5,7 +5,14 @@
         <TagMoneyLi :typeMoney="record.type" 
                 :currentTagId.sync="record.tagId" />
         </div>        
-        <Notes @update:value="upNotes"/>
+        <Notes  
+            spanNote="备注" 
+            :value.sync="record.notes" />
+        <Notes 
+            type="date" 
+            spanNote="日期" 
+            :value.sync="record.createAt" /> 
+                 
         <NumPad :amount.sync="record.amount" @submit="saveRecord" />   
     </Layout>
 </template>
@@ -18,21 +25,21 @@ import TagMoneyLi from '@/components/money/TagMoneyLi.vue';
 import Notes from '@/components/money/Notes.vue';
 import {Component} from 'vue-property-decorator';
 import RecordItem from '@/help/custom';
+import dayjs from 'dayjs';
 
 @Component({
     components:{NumPad, Types, Notes,TagMoneyLi},          
 })
 
-export default class Money extends Vue{    
+export default class Money extends Vue{ 
     record: RecordItem = {
-        tagId: 0,notes:'', type: '-',amount: 0 
+        tagId: 0,notes:'', type: '-',amount: 0 ,createAt: dayjs().format('YYYY-MM-DD')
     };
+    inputType = 'datetime-local';
     created():void{
         this.$store.commit('fetchRecord');
         this.$store.commit('fetchTags')
-    }
-    upNotes(notes:string):void{
-        this.record.notes = notes;
+        
     }
     saveRecord():void{    
         this.$store.commit('createNewRecord', this.record) 

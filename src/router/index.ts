@@ -6,6 +6,7 @@ import Statistics from '@/views/Statistics.vue';
 import NotFound from '../components/NotFound.vue';
 import Edit from '@/views/Edit.vue';
 import NewTag from '@/views/NewTag.vue';
+import Echarts from '@/views/Echarts.vue';
 
 Vue.use(VueRouter)
 

@@ -1,20 +1,35 @@
 <template>
     <label class="remark-notes">
-            <span>备注</span>
-            <input type="text" placeholder="添加备注" v-model="note">
-        </label>
+            <span>{{spanNote}} </span>
+            <template v-if="type==='date'">
+                <input :type="type" 
+                    :value="value"
+                    @input="onNoteChanged($event.target.value)">
+            </template>
+             <template v-else>
+                <input 
+                    :type="type || 'text'" 
+                    placeholder="添加备注" 
+                    :value="value"
+                    @input="onNoteChanged($event.target.value)">
+            </template>
+    </label>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Watch} from 'vue-property-decorator';
+import dayjs from 'dayjs';
+
+import {Component, Prop} from 'vue-property-decorator';
 @Component
 export default class Notes extends Vue{
-   note = '';
-   @Watch('note')
-   onNoteChanged(note: string):void{
-       this.$emit('update:value', note)
-   }
+    @Prop()readonly type?:string ;
+    @Prop()readonly spanNote!:string;
+    @Prop()readonly value!:string;
+    
+    onNoteChanged(value: string):void{
+        this.$emit('update:value', value);
+    }
 
 }
 </script>

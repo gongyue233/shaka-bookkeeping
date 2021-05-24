@@ -11,7 +11,7 @@ type TagState = {
     iconEarn: IconD[],
 }
 const state = {
-    tagList:[
+    tagList:[ //tagList是标签列表，name指应用的图标的name，tagContent指标签名
             {id:0, name:'canyin', tagContent: '餐饮', type: '-'},
             {id:1, name:'shuidianmei', tagContent: '水电煤',type: '-'},
             {id:2, name:'tongxun', tagContent: '通讯', type: '-'},
@@ -63,7 +63,7 @@ const mutations = {
         //如果不存在tagList2是null 
         if(tagList2){ state.tagList = JSON.parse(tagList2)}   
     },
-    setCurrentTah(state:TagState,payload:TagD):void{
+    setCurrentTag(state:TagState,payload:TagD):void{
         state.currentTag = payload;
         window.localStorage.setItem('currentTag',JSON.stringify(state.currentTag));
     },
@@ -71,6 +71,7 @@ const mutations = {
         const currentTag2 = window.localStorage.getItem('currentTag');
         if(currentTag2){ state.currentTag = JSON.parse(currentTag2)}
     },
+    //编辑标签
     updateTag(state:TagState, payload:{name:string, tagContent:string}):void{
         const tagTextList = state.tagList.map((item: TagD) => item.tagContent);
         //标签名列表
@@ -87,6 +88,7 @@ const mutations = {
             alert('请输入标签名')
         }
     },
+    //创建标签
     createNewTag(state:TagState, payload:{type:string, name:string, tagContent:string}):void{
         store.commit('fetchTags')
         if(payload.tagContent===''){ alert('未输入标签名');return;}
@@ -104,9 +106,20 @@ const mutations = {
             alert('未确定标签类型')
         }
     },
+    //保存标签列表到本地
     saveTags(state:TagState):void{
         window.localStorage.setItem('tagList', JSON.stringify(state.tagList));    
     },
+    //删除标签
+    // deleteTag(state:TagState):void{
+    //     const deId = state.currentTag.id;
+    //     state.tagList.splice(deId, 1);
+    //     for(let i=0; i < state.tagList.length; i++){
+    //         state.tagList[i].id = i;
+    //     }
+    //     state.currentTag = {} as TagD;
+    //     store.commit('saveTags');
+    // }
 
 }
 

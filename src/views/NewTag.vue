@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue from 'vue';  
 import ConButton from '@/components/ConButton.vue';
-import IcLi from '@/components/edit/IcLi.vue';
+import IcLi from '@/components/IcLi.vue';  
 import Fanhui from '@/components/edit/Fanhui.vue';
 import {Component} from 'vue-property-decorator';
 
@@ -33,14 +33,13 @@ export default class NewTag extends Vue{
         this.tagNewTag.type = this.typeNT;   
         if(this.typeNT){
             if(this.typeNT==="+"){
-                this.tagNewTag.name = 'qitashouru';
+                this.tagNewTag.name = 'qitashouru';  //根据类型设置初始图标
             }else{
                 this.tagNewTag.name='canyin';
             }
         }else{
             this.$router.push({name:'404'})
-        }
-        this.$store.commit('fetchTags');        
+        }       
     }
     creatNT():void{
         this.$store.commit('createNewTag', this.tagNewTag);   
@@ -62,9 +61,6 @@ export default class NewTag extends Vue{
     }
     .tagArea{
         padding-top: 30px;
-        .eidtTagli ::v-deep .tagLi .item span{
-            display: none;
-        }
     }
     
 }
