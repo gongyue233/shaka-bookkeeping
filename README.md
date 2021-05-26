@@ -10,7 +10,7 @@
 
 效果图：
 
-![image](https://user-images.githubusercontent.com/73221358/119620772-f5b9b800-be37-11eb-913a-8d754c99c394.png)
+![image](https://user-images.githubusercontent.com/73221358/119621038-3c0f1700-be38-11eb-92c3-481f2d6a424b.png)
 
 
 ## Project setup
