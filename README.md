@@ -1,10 +1,17 @@
 # shaka-bookkeeping 纱卡记账本
 本项目使用Vue.js技术栈，涉及到vue-cli、Vuex、VueRouter、webpack、Typescript、ECharts、scss。
 
+预览链接：https://gongyue233.github.io/shaka-bookkeeping2/#/money
+
 项目功能包含：
 * 记账：记录用户输入的金额、时间、选中的标签。
 * 标签：包括编辑标签和新增标签。
 * 统计：将用户的记录按照时间列出，并且有对应的统计图展示近30天的记录。
+
+效果图：
+
+![image](https://user-images.githubusercontent.com/73221358/119620772-f5b9b800-be37-11eb-913a-8d754c99c394.png)
+
 
 ## Project setup
 ```
