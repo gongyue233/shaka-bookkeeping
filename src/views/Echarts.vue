@@ -26,7 +26,6 @@ export default class Echarts extends Vue{
     }
     @Watch('option')
     upChart(newval:EChartsOption){
-        console.log('option检查到')
         this.mychart.setOption(newval)
     }
 

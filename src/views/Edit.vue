@@ -45,7 +45,6 @@ export default class Edit extends Vue{
         this.$router.back()        
     }   
     editDe():void{
-        console.log('x')
         this.$store.commit('deleteTag');
     }
 }
