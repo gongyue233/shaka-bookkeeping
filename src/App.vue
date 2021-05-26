@@ -23,5 +23,7 @@ a{
   font-family: $font-hei;
   font-size: 16px;
   color: #333;
+  max-width: 500px;
+  margin: 0 auto;
 }
 </style>
